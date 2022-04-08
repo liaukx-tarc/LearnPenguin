@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="bigboss.team.leranpenguin">
+    package="bigboss.team.learnpenguin">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LeranPenguin">
         <activity
-            android:name=".MainActivity"
+            android:name="bigboss.team.learnpenguin.MainActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
