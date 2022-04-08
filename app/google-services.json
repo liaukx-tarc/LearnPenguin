@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "120002553306",
+    "firebase_url": "https://learnpenguin-f77c3-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "learnpenguin-f77c3",
+    "storage_bucket": "learnpenguin-f77c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120002553306:android:51fff92aa95f1618d50ce3",
+        "android_client_info": {
+          "package_name": "bigboss.team.leranpenguin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120002553306-n2mgr3j8hdklj2k7aiqoh9n3kh1eddr2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAem2WxB65ufxH6R5TrmDt2Pe_9MkKpgII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120002553306-n2mgr3j8hdklj2k7aiqoh9n3kh1eddr2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
