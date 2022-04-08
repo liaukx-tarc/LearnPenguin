@@ -1,4 +1,4 @@
-package bigboss.team.leranpenguin
+package bigboss.team.learnpenguin
 
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -7,7 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import bigboss.team.leranpenguin.databinding.ActivityMainBinding
+import bigboss.team.learnpenguin.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package bigboss.team.leranpenguin.ui.notifications
+package bigboss.team.learnpenguin.ui.notifications
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package bigboss.team.leranpenguin.ui.dashboard
+package bigboss.team.learnpenguin.ui.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

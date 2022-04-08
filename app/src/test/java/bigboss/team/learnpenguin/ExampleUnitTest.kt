@@ -1,4 +1,4 @@
-package bigboss.team.leranpenguin
+package bigboss.team.learnpenguin
 
 import org.junit.Test
 
