@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("bigboss.team.leranpenguin", appContext.packageName)
+        assertEquals("bigboss.team.learnpenguin", appContext.packageName)
     }
 }

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {

@@ -10,9 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LeranPenguin">
+        android:theme="@style/Theme.LearnPenguin">
         <activity
-            android:name="bigboss.team.learnpenguin.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>

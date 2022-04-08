@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:120002553306:android:51fff92aa95f1618d50ce3",
+        "mobilesdk_app_id": "1:120002553306:android:d9e63de99e5f601bd50ce3",
         "android_client_info": {
-          "package_name": "bigboss.team.leranpenguin"
+          "package_name": "bigboss.team.learnpenguin"
         }
       },
       "oauth_client": [
