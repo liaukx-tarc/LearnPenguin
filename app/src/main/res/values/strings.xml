@@ -19,4 +19,9 @@
     <string name="send">Send</string>
     <string name="email_Ask">Please enter your email</string>
     <string name="ask_Desc">We will send a reset password link to your registered email</string>
+    <string name="username_blank">Please enter username.</string>
+    <string name="username_More50">Username not more than 50 character.</string>
+    <string name="email_blank">Please enter email.</string>
+    <string name="invalid_email">Invalid email.</string>
+    <string name="retyePass_notSame">Not same with password.</string>
 </resources>
