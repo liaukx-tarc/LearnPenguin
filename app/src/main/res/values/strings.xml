@@ -3,6 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_profile">Profile</string>
     <string name="learn">Learn</string>
     <string name="penguin">Penguin</string>
     <string name="username">Username</string>
@@ -24,4 +25,7 @@
     <string name="email_blank">Please enter email.</string>
     <string name="invalid_email">Invalid email.</string>
     <string name="retyePass_notSame">Not same with password.</string>
+    <string name="my_collection">My Collection</string>
+    <string name="role">Role</string>
+    <string name="logout">Log Out</string>
 </resources>

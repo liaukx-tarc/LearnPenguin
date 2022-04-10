@@ -7,11 +7,15 @@ import android.util.Patterns
 import android.widget.Toast
 import bigboss.team.learnpenguin.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +24,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().getReference("User")
 
         binding.txtbtnLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
@@ -36,16 +41,22 @@ class RegisterActivity : AppCompatActivity() {
             val retypePass = binding.inputRetypePass.text.toString()
 
             if (validation(username, email, password, retypePass)) {
-                createAccount(email, password)
+                createAccount(username, email, password)
             }
         }
 
         //binding.inputUsername.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.account, 0, R.drawable.error, 0)
     }
 
-    private fun createAccount(email: String, password: String) {
+    private fun createAccount(username: String, email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
+
+                //Create User data
+                val user = auth.currentUser
+                database.child("User").child(auth.uid.toString()).child("username").setValue(username)
+                database.child("User").child(auth.uid.toString()).child("role").setValue("Student")
+
                 toast("Account create successful")
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
