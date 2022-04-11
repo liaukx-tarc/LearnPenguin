@@ -21,14 +21,15 @@
         android:id="@+id/navigation_profile"
         android:name="bigboss.team.learnpenguin.ui.profile.ProfileFragment"
         android:label="@string/profile"
-        tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_navigation_profile_to_navigation_collection"
-            app:destination="@id/navigation_collection" />
-    </fragment>
+        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/navigation_collection"
-        android:name="bigboss.team.learnpenguin.FragmentCollection"
+        android:name="bigboss.team.learnpenguin.ui.collection.FragmentCollection"
         android:label="@string/collection"
         tools:layout="@layout/fragment_collection" />
+    <fragment
+        android:id="@+id/navigation_rename"
+        android:name="bigboss.team.learnpenguin.ui.profile.FragmentRename"
+        android:label="@string/rename"
+        tools:layout="@layout/fragment_rename" />
 </navigation>
