@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -42,8 +40,8 @@ class ProfileFragment : Fragment() {
 
         database.child("User").child(auth.uid.toString()).get().addOnSuccessListener { result->
             //username
-            viewModel.usersame = result.child("username").value.toString()
-            binding.txtUsername.text = viewModel.usersame
+            viewModel.username = result.child("username").value.toString()
+            binding.txtUsername.text = viewModel.username
 
             //role
             viewModel.role = result.child("role").value.toString()

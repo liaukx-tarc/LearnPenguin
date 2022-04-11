@@ -28,4 +28,11 @@
     <string name="my_collection">My Collection</string>
     <string name="role">Role</string>
     <string name="logout">Log Out</string>
+    <string name="courses">Courses</string>
+    <string name="quiz">Quiz</string>
+    <string name="main">Main</string>
+    <string name="news">News</string>
+    <string name="profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
