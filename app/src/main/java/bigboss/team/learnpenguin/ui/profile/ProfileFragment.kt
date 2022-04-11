@@ -1,6 +1,5 @@
 package bigboss.team.learnpenguin.ui.profile
 
-import android.app.Activity
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -13,11 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.navigation.Navigation
-import bigboss.team.learnpenguin.FragmentCollection
 import bigboss.team.learnpenguin.LoginActivity
 import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentProfileBinding
@@ -46,6 +41,8 @@ class ProfileFragment : Fragment() {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        binding.fragmentContainerView.visibility = View.INVISIBLE
 
         database.child("User").child(auth.uid.toString()).get().addOnSuccessListener { result->
             //username
@@ -95,7 +92,8 @@ class ProfileFragment : Fragment() {
             }
 
         binding.imgbtnEdit.setOnClickListener{
-            
+            binding.fragmentContainerView.visibility = View.VISIBLE
+            Navigation.findNavController(it).navigate(R.id.navigation_rename)
         }
 
         binding.btnLogout.setOnClickListener {
@@ -108,6 +106,7 @@ class ProfileFragment : Fragment() {
         }
 
         binding.txtbtnSeeAll.setOnClickListener {
+            binding.fragmentContainerView.visibility = View.VISIBLE
             Navigation.findNavController(it).navigate(R.id.navigation_collection)
         }
 
