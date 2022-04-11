@@ -1,5 +1,6 @@
 package bigboss.team.learnpenguin.ui.collection
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -13,84 +14,110 @@ import bigboss.team.learnpenguin.databinding.FragmentCollectionBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.File
 
 class FragmentCollection : Fragment() {
 
     private lateinit var binding: FragmentCollectionBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
+    private lateinit var userDatabase: DatabaseReference
+    private lateinit var courseDatabase: DatabaseReference
+    private lateinit var storageRef: StorageReference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        database = FirebaseDatabase.getInstance().getReference("User")
+        userDatabase = FirebaseDatabase.getInstance().getReference("User")
+        courseDatabase = FirebaseDatabase.getInstance().getReference("Course")
+        storageRef = FirebaseStorage.getInstance().reference
         auth = FirebaseAuth.getInstance()
 
         binding = FragmentCollectionBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        database.child("User").child(auth.uid.toString()).get().addOnSuccessListener { result->
-            for (i in 0 until result.child("collection").childrenCount){
+        userDatabase.child("User").child(auth.uid.toString()).get().addOnSuccessListener { userResult->
+            courseDatabase.get().addOnSuccessListener { courseResult->
 
-                Log.i("Activity", i.toString())
+                for (i in 0 until userResult.child("collection").childrenCount){
 
-                //Horizontal Linear Layout
-                var linearLayout = LinearLayout(activity)
-                var layoutParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(1030,380)
-                layoutParam.setMargins(20,40,20,0)
-                linearLayout.layoutParams = layoutParam
-                linearLayout.background = resources.getDrawable(R.drawable.collection_bg)
-                linearLayout.orientation = LinearLayout.HORIZONTAL
+                    val courseID = userResult.child("collection").child(i.toString()).value.toString()
 
-                //Image
-                var imageView = ImageView(activity)
-                var imgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(350, 350)
-                imageView.layoutParams = imgParam
-                imageView.setImageResource(R.drawable.penguin_logo)
+                    //Horizontal Linear Layout
+                    var linearLayout = LinearLayout(activity)
+                    var layoutParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(1030,380)
+                    layoutParam.setMargins(20,40,20,0)
+                    linearLayout.layoutParams = layoutParam
+                    linearLayout.background = resources.getDrawable(R.drawable.collection_bg)
+                    linearLayout.orientation = LinearLayout.HORIZONTAL
 
-                linearLayout.addView(imageView)
+                    //Image
+                    var imageView = ImageView(activity)
+                    var imgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(350, 350)
+                    imageView.layoutParams = imgParam
 
-                //Detail Linear Layout
-                var detailLinearLayout = LinearLayout(activity)
-                var detailLinearParam = LinearLayout.LayoutParams(0, 0)
-                detailLinearParam.setMargins(60,20,0,0)
-                detailLinearLayout.orientation = LinearLayout.VERTICAL
+                    val file = File.createTempFile("temp", "png")
+                    val id = courseResult.child(courseID).child("language").value.toString()
 
-                //Text
-                var textView = TextView(activity)
-                var txtParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(500, 100)
-                txtParam.setMargins(0,20,0,50)
-                textView.layoutParams = txtParam
-                textView.textSize = 20F
-                textView.text = result.child("collection").child(i.toString()).value.toString()
-                textView.ellipsize = TextUtils.TruncateAt.MARQUEE
-                textView.maxLines = 1
+                    storageRef.child("Image/${id}.png").getFile(file)
+                        .addOnSuccessListener {
+                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                            imageView.setImageBitmap(bitmap)
+                        }
 
-                detailLinearLayout.addView(textView)
+                        .addOnFailureListener {ex->
+                            imageView.setImageResource(R.drawable.penguin_logo)
+                            toast(ex.message.toString())
+                        }
 
-                //Star image button
-                var starImageView = ImageView(activity)
-                var starImgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(75, 75)
-                starImageView.layoutParams = starImgParam
-                starImageView.setImageResource(R.drawable.star)
+                    linearLayout.addView(imageView)
 
-                detailLinearLayout.addView(starImageView)
+                    //Detail Linear Layout
+                    var detailLinearLayout = LinearLayout(activity)
+                    var detailLinearParam = LinearLayout.LayoutParams(0, 0)
+                    detailLinearParam.setMargins(60,20,0,0)
+                    detailLinearLayout.orientation = LinearLayout.VERTICAL
 
-                linearLayout.addView(detailLinearLayout)
+                    //Text
+                    var textView = TextView(activity)
+                    var txtParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(500, 100)
+                    txtParam.setMargins(0,20,0,50)
+                    textView.layoutParams = txtParam
+                    textView.textSize = 20F
+                    textView.text = courseResult.child(courseID).child("name").value.toString()
+                    textView.ellipsize = TextUtils.TruncateAt.MARQUEE
+                    textView.maxLines = 1
 
-                //line
-                var lineImageView = ImageView(activity)
-                var lineImgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(1030, 3)
-                lineImgParam.setMargins(20,40,20,0)
-                lineImageView.layoutParams = lineImgParam
-                lineImageView.setImageResource(R.drawable.line)
+                    detailLinearLayout.addView(textView)
 
-                binding.linearCollection.addView(linearLayout)
-                binding.linearCollection.addView(lineImageView)
+                    //Star image button
+                    var starImageView = ImageView(activity)
+                    var starImgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(75, 75)
+                    starImageView.layoutParams = starImgParam
+                    starImageView.setImageResource(R.drawable.star)
+
+                    detailLinearLayout.addView(starImageView)
+
+                    linearLayout.addView(detailLinearLayout)
+
+                    //line
+                    var lineImageView = ImageView(activity)
+                    var lineImgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(1030, 3)
+                    lineImgParam.setMargins(20,40,20,0)
+                    lineImageView.layoutParams = lineImgParam
+                    lineImageView.setImageResource(R.drawable.line)
+
+                    binding.linearCollection.addView(linearLayout)
+                    binding.linearCollection.addView(lineImageView)
+                }
             }
 
+                .addOnFailureListener { ex->
+                    toast(ex.message.toString())
+                }
         }
 
             .addOnFailureListener { ex->
