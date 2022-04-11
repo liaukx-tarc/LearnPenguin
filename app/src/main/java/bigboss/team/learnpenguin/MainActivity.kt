@@ -1,6 +1,7 @@
 package bigboss.team.learnpenguin
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -26,10 +27,15 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_main, R.id.navigation_news, R.id.navigation_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    fun mainMenu(view: View?) {
+        val navView = findViewById<BottomNavigationView>(R.id.nav_view)
+        navView.selectedItemId = R.id.navigation_main
     }
 }
