@@ -33,6 +33,8 @@
     <string name="main">Main</string>
     <string name="news">News</string>
     <string name="profile">Profile</string>
+    <string name="collection">Collection</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="see_all">See All</string>
 </resources>
