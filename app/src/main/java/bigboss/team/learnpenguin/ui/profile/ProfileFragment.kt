@@ -1,5 +1,6 @@
 package bigboss.team.learnpenguin.ui.profile
 
+import android.app.Activity
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -12,12 +13,20 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
+import androidx.navigation.Navigation
+import bigboss.team.learnpenguin.FragmentCollection
 import bigboss.team.learnpenguin.LoginActivity
 import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+
+
+
 
 class ProfileFragment : Fragment() {
 
@@ -47,7 +56,7 @@ class ProfileFragment : Fragment() {
             viewModel.role = result.child("role").value.toString()
             binding.txtRole.text = viewModel.role
 
-            for(i in 0..result.child("collection").childrenCount - 1)
+            for(i in 0 until result.child("collection").childrenCount)
             {
                 viewModel.collection.add(result.child("collection").child(i.toString()).value.toString())
 
@@ -73,7 +82,7 @@ class ProfileFragment : Fragment() {
                 textView.layoutParams = txtParam
                 textView.textSize = 16F
                 textView.text = viewModel.collection[i.toInt()]
-                textView.ellipsize = TextUtils.TruncateAt.END
+                textView.ellipsize = TextUtils.TruncateAt.MARQUEE
                 textView.maxLines = 1
 
                 linearLayout.addView(textView)
@@ -81,13 +90,12 @@ class ProfileFragment : Fragment() {
                 binding.linearCollection.addView(linearLayout)
             }
         }
-            .addOnFailureListener {
-                toast("Fail to get data")
+            .addOnFailureListener { ex->
+                toast(ex.message.toString())
             }
 
         binding.imgbtnEdit.setOnClickListener{
-            binding.txtUsername.visibility = View.INVISIBLE
-
+            
         }
 
         binding.btnLogout.setOnClickListener {
@@ -97,6 +105,10 @@ class ProfileFragment : Fragment() {
             toast("Account successful log out")
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.txtbtnSeeAll.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.navigation_collection)
         }
 
         return root
