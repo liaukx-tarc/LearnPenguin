@@ -1,6 +1,7 @@
 package bigboss.team.learnpenguin.ui.profile
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.TextUtils
@@ -19,8 +20,9 @@ import bigboss.team.learnpenguin.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-
-
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.File
 
 
 class ProfileFragment : Fragment() {
@@ -28,7 +30,9 @@ class ProfileFragment : Fragment() {
     private lateinit var viewModel: ProfileViewModel
     private lateinit var binding: FragmentProfileBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
+    private lateinit var userDatabase: DatabaseReference
+    private lateinit var courseDatabase: DatabaseReference
+    private lateinit var storageRef: StorageReference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +40,9 @@ class ProfileFragment : Fragment() {
     ): View? {
 
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
-        database = FirebaseDatabase.getInstance().getReference("User")
+        userDatabase = FirebaseDatabase.getInstance().getReference("User")
+        courseDatabase = FirebaseDatabase.getInstance().getReference("Course")
+        storageRef = FirebaseStorage.getInstance().reference
         auth = FirebaseAuth.getInstance()
 
         binding = FragmentProfileBinding.inflate(inflater, container, false)
@@ -44,50 +50,69 @@ class ProfileFragment : Fragment() {
 
         binding.fragmentContainerView.visibility = View.INVISIBLE
 
-        database.child("User").child(auth.uid.toString()).get().addOnSuccessListener { result->
-            //username
-            viewModel.username = result.child("username").value.toString()
-            binding.txtUsername.text = viewModel.username
+        userDatabase.child("User").child(auth.uid.toString()).get().addOnSuccessListener { userResult ->
+            courseDatabase.get().addOnSuccessListener { courseResult ->
+                //username
+                viewModel.username = userResult.child("username").value.toString()
+                binding.txtUsername.text = viewModel.username
 
-            //role
-            viewModel.role = result.child("role").value.toString()
-            binding.txtRole.text = viewModel.role
+                //role
+                viewModel.role = userResult.child("role").value.toString()
+                binding.txtRole.text = viewModel.role
 
-            for(i in 0 until result.child("collection").childrenCount)
-            {
-                viewModel.collection.add(result.child("collection").child(i.toString()).value.toString())
+                for (i in 0 until userResult.child("collection").childrenCount) {
 
-                //Vectical Linear Layout
-                var linearLayout = LinearLayout(activity)
-                var layoutParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(350, 450)
-                layoutParam.setMargins(20,30,0,20)
-                linearLayout.layoutParams = layoutParam
-                linearLayout.orientation = LinearLayout.VERTICAL
+                    val courseID = userResult.child("collection").child(i.toString()).value.toString()
+                    viewModel.collection.add(courseID)
 
-                //Image
-                var imageView = ImageView(activity)
-                var imgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(350, 350)
-                imageView.layoutParams = imgParam
-                imageView.setImageResource(R.drawable.penguin_logo)
+                    //Vectical Linear Layout
+                    var linearLayout = LinearLayout(activity)
+                    var layoutParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(350, 450)
+                    layoutParam.setMargins(20, 30, 0, 20)
+                    linearLayout.layoutParams = layoutParam
+                    linearLayout.orientation = LinearLayout.VERTICAL
 
-                linearLayout.addView(imageView)
+                    //Image
+                    var imageView = ImageView(activity)
+                    var imgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(350, 350)
+                    imageView.layoutParams = imgParam
 
-                //Text
-                var textView = TextView(activity)
-                var txtParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(350, 100)
-                txtParam.setMargins(0,15,0,0)
-                textView.layoutParams = txtParam
-                textView.textSize = 16F
-                textView.text = viewModel.collection[i.toInt()]
-                textView.ellipsize = TextUtils.TruncateAt.MARQUEE
-                textView.maxLines = 1
+                    val file = File.createTempFile("temp", "png")
+                    val id = courseResult.child(courseID).child("language").value.toString()
 
-                linearLayout.addView(textView)
+                    storageRef.child("Image/${id}.png").getFile(file)
+                        .addOnSuccessListener {
+                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                            imageView.setImageBitmap(bitmap)
+                        }
 
-                binding.linearCollection.addView(linearLayout)
+                        .addOnFailureListener { ex ->
+                            imageView.setImageResource(R.drawable.penguin_logo)
+                            toast(ex.message.toString())
+                        }
+
+                    linearLayout.addView(imageView)
+
+                    //Text
+                    var textView = TextView(activity)
+                    var txtParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(350, 100)
+                    txtParam.setMargins(0, 15, 0, 0)
+                    textView.layoutParams = txtParam
+                    textView.textSize = 16F
+                    textView.text = courseResult.child(courseID).child("name").value.toString()
+                    textView.ellipsize = TextUtils.TruncateAt.MARQUEE
+                    textView.maxLines = 1
+
+                    linearLayout.addView(textView)
+
+                    binding.linearCollection.addView(linearLayout)
+                }
             }
+                .addOnFailureListener { ex ->
+                    toast(ex.message.toString())
+                }
         }
-            .addOnFailureListener { ex->
+            .addOnFailureListener { ex ->
                 toast(ex.message.toString())
             }
 
