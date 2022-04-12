@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="overview_js">JavaScript often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS. Over 97% of websites use JavaScript on the client side for web page behavior, often incorporating third-party libraries. All major web browsers have a dedicated JavaScript engine to execute the code on users\' devices.</string>
+    <string name="faq_js">Question: What can\'t JavaScript programs do?\n\n Answer: JavaScript code cannot do any of the following:\n\n - use printers or other devices on the user\'s system or the client-side LAN\n - directly access files on the user\'s system or the client-side LAN; one notable exception is the access to cookie files.\n - implement multiprocessing or multithreading.</string>
+    <string name="content_js">What is JavaScript?\n\nJavascript is a dynamic computer programming language. It is lightweight and most commonly used as a part of web pages, whose implementations allow client-side script to interact with the user and make dynamic pages. It is an interpreted programming language with object-oriented capabilities.</string>
+</resources>
