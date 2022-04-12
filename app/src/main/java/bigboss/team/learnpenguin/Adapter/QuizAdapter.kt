@@ -9,14 +9,27 @@ import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.ui.quiz.QuizMenu
 import com.google.android.material.imageview.ShapeableImageView
 
-class QuizAdapter (private val quizList : ArrayList<QuizMenu>) :
-    RecyclerView.Adapter<QuizAdapter.QuizViewHolder>() {
+class QuizAdapter (private val quizList : ArrayList<QuizMenu>) : RecyclerView.Adapter<QuizAdapter.QuizViewHolder>() {
+
+    private lateinit var  itemListener: ItemClickListener
+
+    interface ItemClickListener {
+
+        fun onItemClick(position: Int)
+
+    }
+
+    fun setOnClickListener(listener: ItemClickListener){
+
+        itemListener = listener
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewHolder {
 
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.quiz_list, parent, false)
+        val quizView = LayoutInflater.from(parent.context).inflate(R.layout.quiz_list, parent, false)
 
-        return QuizViewHolder(itemView)
+        return QuizViewHolder(quizView, itemListener)
     }
 
     override fun onBindViewHolder(holder: QuizViewHolder, position: Int) {
@@ -31,9 +44,18 @@ class QuizAdapter (private val quizList : ArrayList<QuizMenu>) :
         return quizList.size
     }
 
-    class QuizViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class QuizViewHolder(quizView: View, listener: ItemClickListener) : RecyclerView.ViewHolder(quizView){
 
-        val quizImage : ShapeableImageView = itemView.findViewById(R.id.quizImage)
-        val quizHeading : TextView = itemView.findViewById(R.id.quizHeading)
+        val quizImage : ShapeableImageView = quizView.findViewById(R.id.quizImage)
+        val quizHeading : TextView = quizView.findViewById(R.id.quizHeading)
+
+        init {
+            itemView.setOnClickListener{
+
+                listener.onItemClick(adapterPosition)
+
+             }
+        }
     }
+
 }
