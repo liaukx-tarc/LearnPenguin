@@ -67,7 +67,8 @@ class FeedAdapter (private val rssObject: RssObject, private val fActivity: Frag
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
         holder.newsTitle.text = rssObject.items[position].title
         holder.newsDate.text = rssObject.items[position].pubDate
-        Picasso.get().load(rssObject.items[position].thumbnail).into(holder.newsImage)
+        if(rssObject.items[position].thumbnail != "" || rssObject.items[position].thumbnail != null)
+            Picasso.get().load(rssObject.items[position].thumbnail).into(holder.newsImage)
 
 
         holder.setItemClickListener(ItemClickListener{ view, position, isLongClick ->
