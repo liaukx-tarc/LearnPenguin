@@ -12,7 +12,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:videoId="1HakS7KsbCk"
         app:autoPlay="true"
-        app:showFullScreenButton="true"
         android:id="@+id/course_js"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,4 +32,9 @@
         android:name="bigboss.team.learnpenguin.ui.profile.FragmentRename"
         android:label="@string/rename"
         tools:layout="@layout/fragment_rename" />
+    <fragment
+        android:id="@+id/navigation_quiz"
+        android:name="bigboss.team.learnpenguin.ui.quiz.QuizFragment"
+        android:label="@string/quiz"
+        tools:layout="@layout/fragment_quiz" />
 </navigation>
