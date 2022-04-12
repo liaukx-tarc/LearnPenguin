@@ -2,6 +2,7 @@ package bigboss.team.learnpenguin.ui.quiz
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,12 +25,11 @@ class QuizFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var courseNameDatabase: DatabaseReference
     private lateinit var storageRef: StorageReference
-    private lateinit var newArrayList: ArrayList<QuizMenu>
-
-    val quizList : RecyclerView ?= null
+    var newArrayList = ArrayList<QuizMenu>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
 
         courseNameDatabase = FirebaseDatabase.getInstance().getReference("CourseName")
         storageRef = FirebaseStorage.getInstance().reference
@@ -38,28 +38,37 @@ class QuizFragment : Fragment() {
         binding = FragmentQuizBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        courseNameDatabase.get().addOnSuccessListener { courseNameResult->
-            for (i in 0 until 5){
+        courseNameDatabase.get().addOnSuccessListener { courseNameResult ->
+
+            for (i in 0 until 5) {
 
                 val file = File.createTempFile("temp", "png")
                 val id = courseNameResult.child(i.toString()).value.toString()
 
+                Log.i("Activity", id)
+
                 storageRef.child("Image/${id}.png").getFile(file)
                     .addOnSuccessListener {
+                        Log.i("Activity", "Successful")
                         val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-
                         val quizMenu = QuizMenu(bitmap, id)
 
                         newArrayList.add(quizMenu)
+
+                        if(i == 4)
+                        {
+                            Log.i("Activity", "Binding")
+
+                            binding.quizList.layoutManager = LinearLayoutManager(activity)
+                            binding.quizList.setHasFixedSize(true)
+
+                            binding.quizList.adapter = QuizAdapter(newArrayList)
+                        }
                     }
             }
-
-            binding.quizList.layoutManager = LinearLayoutManager(activity)
-            binding.quizList.setHasFixedSize(true)
-
-            binding.quizList.adapter = QuizAdapter(newArrayList)
-            //newRecyclerView.adapter = QuizAdapter(newArrayList)
         }
+
+            //newRecyclerView.adapter = QuizAdapter(newArrayList)
 
         return root
     }
