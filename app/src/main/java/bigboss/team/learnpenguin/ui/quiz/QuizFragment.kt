@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import bigboss.team.learnpenguin.Adapter.QuizAdapter
 import bigboss.team.learnpenguin.databinding.FragmentQuizBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -28,8 +28,7 @@ class QuizFragment : Fragment() {
     var newArrayList = ArrayList<QuizMenu>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         courseNameDatabase = FirebaseDatabase.getInstance().getReference("CourseName")
         storageRef = FirebaseStorage.getInstance().reference
@@ -66,6 +65,17 @@ class QuizFragment : Fragment() {
                         }
                     }
             }
+
+            var adapter = QuizAdapter(newArrayList)
+            adapter.setOnClickListener(object : QuizAdapter.ItemClickListener{
+
+               override fun onItemClick(position: Int) {
+
+                    Toast.makeText(activity, "Clicked on No.$position", Toast.LENGTH_SHORT).show()
+
+                }
+
+            })
         }
 
             //newRecyclerView.adapter = QuizAdapter(newArrayList)
