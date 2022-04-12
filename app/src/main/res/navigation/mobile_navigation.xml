@@ -37,4 +37,9 @@
         android:name="bigboss.team.learnpenguin.ui.quiz.QuizFragment"
         android:label="@string/quiz"
         tools:layout="@layout/fragment_quiz" />
+    <fragment
+        android:id="@+id/courseJsFragment"
+        android:name="bigboss.team.learnpenguin.ui.course.CourseJsFragment"
+        android:label="JaveScript Course "
+        tools:layout="@layout/fragment_course_js" />
 </navigation>
