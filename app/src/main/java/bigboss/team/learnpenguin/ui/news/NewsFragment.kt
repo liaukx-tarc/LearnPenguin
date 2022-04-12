@@ -35,8 +35,10 @@ class NewsFragment : Fragment() {
         val recyclerView = binding.newsList
         recyclerView.layoutManager = linearLayoutManager
 
-        loadRSS()
-
+        if(activity != null)
+        {
+            loadRSS()
+        }
         return root
     }
 

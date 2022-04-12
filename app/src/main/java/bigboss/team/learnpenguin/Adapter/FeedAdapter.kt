@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import bigboss.team.learnpenguin.Interface.ItemClickListener
 import bigboss.team.learnpenguin.Model.RssObject
 import bigboss.team.learnpenguin.R
+import bigboss.team.learnpenguin.databinding.FragmentNewsBinding
 import com.squareup.picasso.Picasso
 
 class FeedViewHolder (itemView: View):RecyclerView.ViewHolder(itemView), View.OnClickListener,View.OnLongClickListener
@@ -57,6 +58,7 @@ class FeedAdapter (private val rssObject: RssObject, private val fActivity: Frag
     init {
         inflater = LayoutInflater.from(fActivity)
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
         val itemView = inflater.inflate(R.layout.news_row,parent,false)
         return FeedViewHolder(itemView)
