@@ -2,24 +2,26 @@ package bigboss.team.learnpenguin.ui.news
 
 import android.os.AsyncTask
 import android.os.Bundle
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import bigboss.team.learnpenguin.Adapter.FeedAdapter
 import bigboss.team.learnpenguin.Common.HTTPDataHandler
 import bigboss.team.learnpenguin.Model.RssObject
+import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentNewsBinding
 import com.google.gson.Gson
-import java.lang.StringBuilder
 
 
 class NewsFragment : Fragment() {
 
     private lateinit var binding: FragmentNewsBinding
+// ...
+
     private val rssLink = "http://feeds.arstechnica.com/arstechnica/technology-lab"
     private val rss2JsonApi = "https://api.rss2json.com/v1/api.json?rss_url="
 
@@ -31,12 +33,13 @@ class NewsFragment : Fragment() {
     ): View? {
 
         binding = FragmentNewsBinding.inflate(inflater, container, false)
+
         val root: View = binding.root
         val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
         val recyclerView = binding.newsList
         recyclerView.layoutManager = linearLayoutManager
 
-        if(activity != null)
+        if(activity != null && rssLink!= null)
         {
             loadRSS()
         }
@@ -48,6 +51,10 @@ class NewsFragment : Fragment() {
             }
             recyclerView.adapter?.notifyDataSetChanged()
             swipeRefreshLayout.isRefreshing = false
+        }
+
+        binding.favNews.setOnClickListener { view ->
+            Navigation.findNavController(view).navigate(R.id.navigation_fav_news)
         }
         return root
     }

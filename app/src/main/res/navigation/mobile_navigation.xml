@@ -15,12 +15,21 @@
         android:id="@+id/navigation_news"
         android:name="bigboss.team.learnpenguin.ui.news.NewsFragment"
         android:label="@string/news"
+        android:menuCategory="secondary"
         tools:layout="@layout/fragment_news" />
+
+    <fragment
+        android:id="@+id/navigation_fav_news"
+        android:name="bigboss.team.learnpenguin.ui.news.FavNewsFragment"
+        android:label="@string/favourite_news"
+        tools:layout="@layout/fragment_fav_news" />
+
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="bigboss.team.learnpenguin.ui.profile.ProfileFragment"
         android:label="@string/profile"
+        android:menuCategory="secondary"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/navigation_collection"
@@ -36,10 +45,12 @@
         android:id="@+id/navigation_quiz"
         android:name="bigboss.team.learnpenguin.ui.quiz.QuizFragment"
         android:label="@string/quiz"
+        android:menuCategory="secondary"
         tools:layout="@layout/fragment_quiz" />
     <fragment
         android:id="@+id/courseJsFragment"
         android:name="bigboss.team.learnpenguin.ui.course.js.CourseJsFragment"
         android:label="JaveScript Course "
+        android:menuCategory="secondary"
         tools:layout="@layout/fragment_course_js" />
 </navigation>
