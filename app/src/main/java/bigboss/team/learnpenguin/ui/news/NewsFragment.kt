@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import bigboss.team.learnpenguin.Adapter.FeedAdapter
 import bigboss.team.learnpenguin.Common.HTTPDataHandler
 import bigboss.team.learnpenguin.Model.RssObject
@@ -19,10 +20,10 @@ import java.lang.StringBuilder
 class NewsFragment : Fragment() {
 
     private lateinit var binding: FragmentNewsBinding
-    private val rssLink = "https://www.howtogeek.com/feed/"
+    private val rssLink = "http://feeds.arstechnica.com/arstechnica/technology-lab"
     private val rss2JsonApi = "https://api.rss2json.com/v1/api.json?rss_url="
 
-    val newsList : RecyclerView ?= null
+    private lateinit var swipeRefreshLayout:SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +39,15 @@ class NewsFragment : Fragment() {
         if(activity != null)
         {
             loadRSS()
+        }
+        swipeRefreshLayout = binding.newsSwipe
+        swipeRefreshLayout.setOnRefreshListener {
+            if(activity != null)
+            {
+                loadRSS()
+            }
+            recyclerView.adapter?.notifyDataSetChanged()
+            swipeRefreshLayout.isRefreshing = false
         }
         return root
     }
@@ -65,7 +75,7 @@ class NewsFragment : Fragment() {
         }
 
         val urlGetData = StringBuilder(rss2JsonApi)
-        urlGetData.append(rssLink)
+        urlGetData.append(rssLink+"&api_key=yjgpynj8b3683nl4mvgynzpdcikfzu9pyodlgg8a&count=25")
         loadRssASync.execute(urlGetData.toString())
     }
 
