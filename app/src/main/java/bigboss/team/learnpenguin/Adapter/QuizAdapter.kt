@@ -57,5 +57,4 @@ class QuizAdapter (private val quizList : ArrayList<QuizMenu>) : RecyclerView.Ad
              }
         }
     }
-
 }
