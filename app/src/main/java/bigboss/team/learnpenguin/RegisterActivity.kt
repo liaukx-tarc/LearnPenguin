@@ -56,6 +56,11 @@ class RegisterActivity : AppCompatActivity() {
                 val user = auth.currentUser
                 database.child("User").child(auth.uid.toString()).child("username").setValue(username)
                 database.child("User").child(auth.uid.toString()).child("role").setValue("Student")
+                for (i in 0 until 5)
+                {
+                        database.child("User").child(auth.uid.toString()).child("collection")
+                            .child(i.toString()).setValue(false)
+                }
 
                 toast("Account create successful")
                 val intent = Intent(this, LoginActivity::class.java)
