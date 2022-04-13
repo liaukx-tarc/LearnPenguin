@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.navigation.Navigation
 import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentCollectionBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -53,6 +54,12 @@ class FragmentCollection : Fragment() {
                     linearLayout.layoutParams = layoutParam
                     linearLayout.background = resources.getDrawable(R.drawable.collection_bg)
                     linearLayout.orientation = LinearLayout.HORIZONTAL
+                    linearLayout.isClickable = true
+                    linearLayout.setOnClickListener {
+                        Navigation.findNavController(it).navigate(resources.getIdentifier(
+                            courseResult.child(courseID).child("id").value.toString(),
+                            "id", activity?.packageName))
+                    }
 
                     //Image
                     var imageView = ImageView(activity)
@@ -98,6 +105,24 @@ class FragmentCollection : Fragment() {
                     var starImgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(75, 75)
                     starImageView.layoutParams = starImgParam
                     starImageView.setImageResource(R.drawable.star)
+                    starImageView.isClickable = true
+                    starImageView.setOnClickListener { view ->
+                        for (j in 0 until userResult.child("collection").childrenCount - 1) {
+                            userDatabase.child("User").child(auth.uid.toString())
+                                .child("collection").child((i + j).toString()).setValue(
+                                    userResult.child("collection")
+                                        .child((i + j + 1).toString()).value.toString()
+                                )
+                        }
+                        userDatabase.child("User").child(auth.uid.toString()).child("collection")
+                            .child((userResult.child("collection").childrenCount - 1).toString())
+                            .removeValue()
+                            .addOnSuccessListener {
+                                toast("Favourite  Course Removed")
+                                Navigation.findNavController(view)
+                                    .navigate(R.id.navigation_collection)
+                            }
+                    }
 
                     detailLinearLayout.addView(starImageView)
 
