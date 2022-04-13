@@ -25,6 +25,7 @@ class FragmentCollection : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var userDatabase: DatabaseReference
     private lateinit var courseDatabase: DatabaseReference
+    private lateinit var courseNameDatabase: DatabaseReference
     private lateinit var storageRef: StorageReference
 
     override fun onCreateView(
@@ -34,6 +35,7 @@ class FragmentCollection : Fragment() {
 
         userDatabase = FirebaseDatabase.getInstance().getReference("User")
         courseDatabase = FirebaseDatabase.getInstance().getReference("Course")
+        courseNameDatabase = FirebaseDatabase.getInstance().getReference("CourseName")
         storageRef = FirebaseStorage.getInstance().reference
         auth = FirebaseAuth.getInstance()
 
@@ -41,103 +43,113 @@ class FragmentCollection : Fragment() {
         val root: View = binding.root
 
         userDatabase.child("User").child(auth.uid.toString()).get().addOnSuccessListener { userResult->
-            courseDatabase.get().addOnSuccessListener { courseResult->
+            courseNameDatabase.get().addOnSuccessListener { courseNameResult ->
+                courseDatabase.get().addOnSuccessListener { courseResult ->
 
-                for (i in 0 until userResult.child("collection").childrenCount){
+                    for (i in 0 until 5) {
 
-                    val courseID = userResult.child("collection").child(i.toString()).value.toString()
+                        if(userResult.child("collection").child(i.toString()).value == true)
+                        {
+                            val courseID = courseNameResult.child(i.toString()).value.toString()
 
-                    //Horizontal Linear Layout
-                    var linearLayout = LinearLayout(activity)
-                    var layoutParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(1030,380)
-                    layoutParam.setMargins(20,40,20,0)
-                    linearLayout.layoutParams = layoutParam
-                    linearLayout.background = resources.getDrawable(R.drawable.collection_bg)
-                    linearLayout.orientation = LinearLayout.HORIZONTAL
-                    linearLayout.isClickable = true
-                    linearLayout.setOnClickListener {
-                        Navigation.findNavController(it).navigate(resources.getIdentifier(
-                            courseResult.child(courseID).child("id").value.toString(),
-                            "id", activity?.packageName))
-                    }
-
-                    //Image
-                    var imageView = ImageView(activity)
-                    var imgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(350, 350)
-                    imageView.layoutParams = imgParam
-
-                    val file = File.createTempFile("temp", "png")
-                    val id = courseResult.child(courseID).child("language").value.toString()
-
-                    storageRef.child("Image/${id}.png").getFile(file)
-                        .addOnSuccessListener {
-                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                            imageView.setImageBitmap(bitmap)
-                        }
-
-                        .addOnFailureListener {ex->
-                            imageView.setImageResource(R.drawable.penguin_logo)
-                            toast(ex.message.toString())
-                        }
-
-                    linearLayout.addView(imageView)
-
-                    //Detail Linear Layout
-                    var detailLinearLayout = LinearLayout(activity)
-                    var detailLinearParam = LinearLayout.LayoutParams(0, 0)
-                    detailLinearParam.setMargins(60,20,0,0)
-                    detailLinearLayout.orientation = LinearLayout.VERTICAL
-
-                    //Text
-                    var textView = TextView(activity)
-                    var txtParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(500, 100)
-                    txtParam.setMargins(0,20,0,50)
-                    textView.layoutParams = txtParam
-                    textView.textSize = 20F
-                    textView.text = courseResult.child(courseID).child("name").value.toString()
-                    textView.ellipsize = TextUtils.TruncateAt.MARQUEE
-                    textView.maxLines = 1
-
-                    detailLinearLayout.addView(textView)
-
-                    //Star image button
-                    var starImageView = ImageView(activity)
-                    var starImgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(75, 75)
-                    starImageView.layoutParams = starImgParam
-                    starImageView.setImageResource(R.drawable.star)
-                    starImageView.isClickable = true
-                    starImageView.setOnClickListener { view ->
-                        for (j in 0 until userResult.child("collection").childrenCount - 1) {
-                            userDatabase.child("User").child(auth.uid.toString())
-                                .child("collection").child((i + j).toString()).setValue(
-                                    userResult.child("collection")
-                                        .child((i + j + 1).toString()).value.toString()
+                            //Horizontal Linear Layout
+                            var linearLayout = LinearLayout(activity)
+                            var layoutParam: LinearLayout.LayoutParams =
+                                LinearLayout.LayoutParams(1030, 380)
+                            layoutParam.setMargins(20, 40, 20, 0)
+                            linearLayout.layoutParams = layoutParam
+                            linearLayout.background = resources.getDrawable(R.drawable.collection_bg)
+                            linearLayout.orientation = LinearLayout.HORIZONTAL
+                            linearLayout.isClickable = true
+                            linearLayout.setOnClickListener {
+                                Navigation.findNavController(it).navigate(
+                                    resources.getIdentifier(
+                                        courseResult.child(courseID).child("id").value.toString(),
+                                        "id", activity?.packageName
+                                    )
                                 )
-                        }
-                        userDatabase.child("User").child(auth.uid.toString()).child("collection")
-                            .child((userResult.child("collection").childrenCount - 1).toString())
-                            .removeValue()
-                            .addOnSuccessListener {
-                                toast("Favourite  Course Removed")
-                                Navigation.findNavController(view)
-                                    .navigate(R.id.navigation_collection)
                             }
+
+                            //Image
+                            var imageView = ImageView(activity)
+                            var imgParam: LinearLayout.LayoutParams =
+                                LinearLayout.LayoutParams(350, 350)
+                            imageView.layoutParams = imgParam
+
+                            val file = File.createTempFile("temp", "png")
+
+                            storageRef.child("Image/${courseID}.png").getFile(file)
+                                .addOnSuccessListener {
+                                    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                                    imageView.setImageBitmap(bitmap)
+                                }
+
+                                .addOnFailureListener { ex ->
+                                    imageView.setImageResource(R.drawable.penguin_logo)
+                                    toast(ex.message.toString())
+                                }
+
+                            linearLayout.addView(imageView)
+
+                            //Detail Linear Layout
+                            var detailLinearLayout = LinearLayout(activity)
+                            var detailLinearParam = LinearLayout.LayoutParams(0, 0)
+                            detailLinearParam.setMargins(60, 20, 0, 0)
+                            detailLinearLayout.orientation = LinearLayout.VERTICAL
+
+                            //Text
+                            var textView = TextView(activity)
+                            var txtParam: LinearLayout.LayoutParams =
+                                LinearLayout.LayoutParams(500, 100)
+                            txtParam.setMargins(0, 20, 0, 50)
+                            textView.layoutParams = txtParam
+                            textView.textSize = 20F
+                            textView.text = courseResult.child(courseID).child("name").value.toString()
+                            textView.ellipsize = TextUtils.TruncateAt.MARQUEE
+                            textView.maxLines = 1
+
+                            detailLinearLayout.addView(textView)
+
+                            //Star image button
+                            var starImageView = ImageView(activity)
+                            var starImgParam: LinearLayout.LayoutParams =
+                                LinearLayout.LayoutParams(75, 75)
+                            starImageView.layoutParams = starImgParam
+                            starImageView.setImageResource(R.drawable.star)
+                            starImageView.isClickable = true
+                            starImageView.setOnClickListener { view ->
+                                userDatabase.child("User").child(auth.uid.toString()).child("collection").child(i.toString())
+                                    .setValue(false).addOnSuccessListener {
+                                        toast("Favorite course removed")
+                                        Navigation.findNavController(view).navigate(R.id.navigation_collection)
+                                    }
+                                    .addOnFailureListener {
+                                        toast("Fail remove")
+                                    }
+
+                            }
+
+                            detailLinearLayout.addView(starImageView)
+
+                            linearLayout.addView(detailLinearLayout)
+
+                            //line
+                            var lineImageView = ImageView(activity)
+                            var lineImgParam: LinearLayout.LayoutParams =
+                                LinearLayout.LayoutParams(1030, 3)
+                            lineImgParam.setMargins(20, 40, 20, 0)
+                            lineImageView.layoutParams = lineImgParam
+                            lineImageView.setImageResource(R.drawable.line)
+
+                            binding.linearCollection.addView(linearLayout)
+                            binding.linearCollection.addView(lineImageView)
+                        }
+
                     }
-
-                    detailLinearLayout.addView(starImageView)
-
-                    linearLayout.addView(detailLinearLayout)
-
-                    //line
-                    var lineImageView = ImageView(activity)
-                    var lineImgParam: LinearLayout.LayoutParams = LinearLayout.LayoutParams(1030, 3)
-                    lineImgParam.setMargins(20,40,20,0)
-                    lineImageView.layoutParams = lineImgParam
-                    lineImageView.setImageResource(R.drawable.line)
-
-                    binding.linearCollection.addView(linearLayout)
-                    binding.linearCollection.addView(lineImageView)
                 }
+                    .addOnFailureListener { ex ->
+                        toast(ex.message.toString())
+                    }
             }
 
                 .addOnFailureListener { ex->
@@ -148,8 +160,6 @@ class FragmentCollection : Fragment() {
             .addOnFailureListener { ex->
                 toast(ex.message.toString())
             }
-
-
 
         return root
     }
