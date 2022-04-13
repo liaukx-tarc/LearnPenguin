@@ -58,4 +58,24 @@
         android:name="bigboss.team.learnpenguin.ui.course.CourseFragment"
         android:label="@string/courses"
         tools:layout="@layout/fragment_course" />
+    <fragment
+        android:id="@+id/courseJFragment"
+        android:name="bigboss.team.learnpenguin.ui.course.j.CourseJFragment"
+        android:label="Java Course"
+        tools:layout="@layout/fragment_course_j" />
+    <fragment
+        android:id="@+id/courseCFragment"
+        android:name="bigboss.team.learnpenguin.ui.course.c.CourseCFragment"
+        android:label="C Course"
+        tools:layout="@layout/fragment_course_c" />
+    <fragment
+        android:id="@+id/courseCppFragment"
+        android:name="bigboss.team.learnpenguin.ui.course.cpp.CourseCppFragment"
+        android:label="C++ Course"
+        tools:layout="@layout/fragment_course_cpp" />
+    <fragment
+        android:id="@+id/courseCsFragment"
+        android:name="bigboss.team.learnpenguin.ui.course.cs.CourseCsFragment"
+        android:label="C# Course"
+        tools:layout="@layout/fragment_course_cs" />
 </navigation>

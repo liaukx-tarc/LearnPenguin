@@ -29,7 +29,7 @@ class CourseFragment : Fragment() {
     private lateinit var storageRef: StorageReference
     var newArrayList = ArrayList<CourseMenu>()
 
-    private val fragmentList = arrayOf(R.id.courseJsFragment, R.id.courseJsFragment)
+    private val fragmentList = arrayOf(R.id.courseCFragment, R.id.courseCsFragment, R.id.courseCppFragment, R.id.courseJFragment, R.id.courseJsFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
