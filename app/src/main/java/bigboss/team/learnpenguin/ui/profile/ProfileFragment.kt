@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -71,6 +72,13 @@ class ProfileFragment : Fragment() {
                     layoutParam.setMargins(20, 30, 0, 20)
                     linearLayout.layoutParams = layoutParam
                     linearLayout.orientation = LinearLayout.VERTICAL
+                    linearLayout.setBackgroundColor(resources.getColor(R.color.gray))
+                    linearLayout.isClickable = true
+                    linearLayout.setOnClickListener {
+                        Navigation.findNavController(it).navigate(resources.getIdentifier(
+                            courseResult.child(courseID).child("id").value.toString(),
+                            "id", activity?.packageName))
+                    }
 
                     //Image
                     var imageView = ImageView(activity)
