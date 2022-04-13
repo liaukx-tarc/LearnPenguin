@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import bigboss.team.learnpenguin.Adapter.CourseAdapter
+import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentCourseBinding
 import bigboss.team.learnpenguin.ui.course.CourseMenu
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +28,8 @@ class CourseFragment : Fragment() {
     private lateinit var courseNameDatabase: DatabaseReference
     private lateinit var storageRef: StorageReference
     var newArrayList = ArrayList<CourseMenu>()
+
+    private val fragmentList = arrayOf(R.id.courseJsFragment, R.id.courseJsFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,21 +65,10 @@ class CourseFragment : Fragment() {
                             binding.courseList.layoutManager = LinearLayoutManager(activity)
                             binding.courseList.setHasFixedSize(true)
 
-                            binding.courseList.adapter = CourseAdapter(newArrayList)
+                            binding.courseList.adapter = CourseAdapter(newArrayList, fragmentList)
                         }
                     }
             }
-
-            var adapter = CourseAdapter(newArrayList)
-            adapter.setOnClickListener(object : CourseAdapter.ItemClickListener{
-
-                override fun onItemClick(position: Int) {
-
-                    Toast.makeText(activity, "Clicked on No.$position", Toast.LENGTH_SHORT).show()
-
-                }
-
-            })
         }
 
         //newRecyclerView.adapter = CourseAdapter(newArrayList)

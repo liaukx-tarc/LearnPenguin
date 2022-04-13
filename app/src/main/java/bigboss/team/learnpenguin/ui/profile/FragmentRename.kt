@@ -34,10 +34,6 @@ class FragmentRename : Fragment() {
         binding = FragmentRenameBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-
-
-
         binding.btnRename.setOnClickListener { view->
             binding.errorUsername.text = null
             val username = binding.inputUsername.text.toString()
