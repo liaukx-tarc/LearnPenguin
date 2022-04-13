@@ -53,4 +53,9 @@
         android:label="JaveScript Course "
         android:menuCategory="secondary"
         tools:layout="@layout/fragment_course_js" />
+    <fragment
+        android:id="@+id/courseFragment"
+        android:name="bigboss.team.learnpenguin.ui.course.CourseFragment"
+        android:label="@string/courses"
+        tools:layout="@layout/fragment_course" />
 </navigation>
