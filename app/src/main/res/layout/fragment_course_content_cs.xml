@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Content C#"
+        android:text="@string/content_cs"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:scrollbars="vertical" />

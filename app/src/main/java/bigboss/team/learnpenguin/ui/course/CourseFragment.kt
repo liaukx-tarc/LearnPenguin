@@ -29,7 +29,7 @@ class CourseFragment : Fragment() {
     private lateinit var storageRef: StorageReference
     var newArrayList = ArrayList<CourseMenu>()
 
-    private val fragmentList = arrayOf(R.id.courseCFragment, R.id.courseCsFragment, R.id.courseCppFragment, R.id.courseJFragment, R.id.courseJsFragment)
+    private val fragmentList = arrayOf(R.id.courseCFragment, R.id.courseCppFragment, R.id.courseCsFragment, R.id.courseJFragment, R.id.courseJsFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,7 +43,7 @@ class CourseFragment : Fragment() {
 
         courseNameDatabase.get().addOnSuccessListener { courseNameResult ->
 
-            for (i in 0 until 5) {
+            for (i in 0 until 4) {
 
                 val file = File.createTempFile("temp", "png")
                 val id = courseNameResult.child(i.toString()).value.toString()
@@ -68,11 +68,11 @@ class CourseFragment : Fragment() {
                             binding.courseList.adapter = CourseAdapter(newArrayList, fragmentList)
                         }
                     }
+                }
             }
-        }
 
         //newRecyclerView.adapter = CourseAdapter(newArrayList)
 
         return root
-}
+        }
     }

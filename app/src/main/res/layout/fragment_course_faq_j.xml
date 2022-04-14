@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="FAQ Java"
+        android:text="@string/faq_j"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
