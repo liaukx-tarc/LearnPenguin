@@ -15,7 +15,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:videoId="1HakS7KsbCk" />
+        app:videoId="2dZiMBwX_5Q" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
