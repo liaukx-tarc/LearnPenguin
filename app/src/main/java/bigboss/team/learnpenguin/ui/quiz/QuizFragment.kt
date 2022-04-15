@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import bigboss.team.learnpenguin.Adapter.QuizAdapter
+import bigboss.team.learnpenguin.Adapter.QuizViewHolder
 import bigboss.team.learnpenguin.databinding.FragmentQuizBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -65,17 +66,7 @@ class QuizFragment : Fragment() {
                         }
                     }
             }
-
-            var adapter = QuizAdapter(newArrayList)
-            adapter.setOnClickListener(object : QuizAdapter.ItemClickListener{
-
-               override fun onItemClick(position: Int) {
-
-                    Toast.makeText(activity, "Clicked on No.$position", Toast.LENGTH_SHORT).show()
-
-                }
-
-            })
+            
         }
 
             //newRecyclerView.adapter = QuizAdapter(newArrayList)
