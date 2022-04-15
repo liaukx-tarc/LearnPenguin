@@ -12,13 +12,14 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import bigboss.team.learnpenguin.Interface.ItemClickListener
+import bigboss.team.learnpenguin.Model.FavNewsObject
 import bigboss.team.learnpenguin.Model.Item
 import bigboss.team.learnpenguin.Model.RssObject
 import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentNewsBinding
 import com.squareup.picasso.Picasso
 
-class FeedViewHolder (itemView: View):RecyclerView.ViewHolder(itemView), View.OnClickListener,View.OnLongClickListener
+class FavNewsViewHolder (itemView: View):RecyclerView.ViewHolder(itemView), View.OnClickListener,View.OnLongClickListener
 {
     var newsTitle:TextView
     var newsDate:TextView
@@ -27,9 +28,9 @@ class FeedViewHolder (itemView: View):RecyclerView.ViewHolder(itemView), View.On
     private var itemClickListener : ItemClickListener ?= null
 
     init {
-        newsTitle = itemView.findViewById(R.id.newsTitle) as TextView
-        newsDate = itemView.findViewById(R.id.newsDate) as TextView
-        newsImage = itemView.findViewById(R.id.newsImage) as ImageView
+        newsTitle = itemView.findViewById(R.id.favNewsTitle) as TextView
+        newsDate = itemView.findViewById(R.id.favNewsDate) as TextView
+        newsImage = itemView.findViewById(R.id.favNewsImage) as ImageView
 
         itemView.setOnClickListener(this)
         itemView.setOnLongClickListener(this)
@@ -51,7 +52,7 @@ class FeedViewHolder (itemView: View):RecyclerView.ViewHolder(itemView), View.On
 
 }
 
-class FeedAdapter (private val rssObject: RssObject, private val fActivity: FragmentActivity?): RecyclerView.Adapter<FeedViewHolder>()
+class FavNewsAdapter (private val favNewsObjectList: ArrayList<FavNewsObject>, private val fActivity: FragmentActivity?): RecyclerView.Adapter<FavNewsViewHolder>()
 {
     private val inflater:LayoutInflater
 
@@ -59,31 +60,32 @@ class FeedAdapter (private val rssObject: RssObject, private val fActivity: Frag
         inflater = LayoutInflater.from(fActivity)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
-        val itemView = inflater.inflate(R.layout.news_row,parent,false)
-        return FeedViewHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavNewsViewHolder {
+        val itemView = inflater.inflate(R.layout.fav_news_row,parent,false)
+        return FavNewsViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        holder.newsTitle.text = rssObject.items[position].title
-        holder.newsDate.text = rssObject.items[position].pubDate
-        if(rssObject.items[position].thumbnail != "" || rssObject.items[position].thumbnail != null)
-            Picasso.get().load(rssObject.items[position].thumbnail).into(holder.newsImage)
+    override fun onBindViewHolder(holder: FavNewsViewHolder, position: Int) {
+        holder.newsTitle.text = favNewsObjectList[position].title
+        holder.newsDate.text = favNewsObjectList[position].pubDate
+        if(favNewsObjectList[position].thumbnail != "" || favNewsObjectList[position].thumbnail != null)
+            Picasso.get().load(favNewsObjectList[position].thumbnail).into(holder.newsImage)
 
 
         holder.setItemClickListener(ItemClickListener{ view, position, isLongClick ->
 
             if(!isLongClick)
             {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(rssObject.items[position].link))
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(favNewsObjectList[position].link))
                 fActivity?.startActivity(browserIntent)
             }
         } )
     }
 
     override fun getItemCount(): Int {
-        return rssObject.items.size
+        return favNewsObjectList.size
     }
 
 }
+
 
