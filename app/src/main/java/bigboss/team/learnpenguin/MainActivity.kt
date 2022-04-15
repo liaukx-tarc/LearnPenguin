@@ -3,23 +3,27 @@ package bigboss.team.learnpenguin
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import bigboss.team.learnpenguin.Model.FavNewsObject
 import bigboss.team.learnpenguin.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var favNewsObjectList : ArrayList<FavNewsObject>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        favNewsObjectList = arrayListOf()
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
@@ -56,5 +60,27 @@ class MainActivity : AppCompatActivity() {
     fun mainMenu(view: View?) {
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
         navView.selectedItemId = R.id.navigation_main
+    }
+
+    fun addFavNews(favNewsObject : FavNewsObject){
+        if(!favNewsObjectList.contains(favNewsObject))
+        {
+            favNewsObjectList.add(favNewsObject)
+            Toast.makeText(this,"Favourite News Added", Toast.LENGTH_SHORT).show()
+        }
+        else
+        {
+            Toast.makeText(this,"News Already Added", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    fun removeFavNews(i: Int){
+        favNewsObjectList.removeAt(i)
+        Toast.makeText(this,"Favourite News Removed", Toast.LENGTH_SHORT).show()
+    }
+
+    fun getFavNewsObjectList(): ArrayList<FavNewsObject> {
+        return favNewsObjectList
     }
 }

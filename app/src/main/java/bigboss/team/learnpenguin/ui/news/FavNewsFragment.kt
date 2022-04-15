@@ -5,19 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import bigboss.team.learnpenguin.Adapter.FavNewsAdapter
+import bigboss.team.learnpenguin.Common.SwipeToAddFunction
+import bigboss.team.learnpenguin.Common.SwipeToDeleteFunction
+import bigboss.team.learnpenguin.MainActivity
+import bigboss.team.learnpenguin.Model.FavNewsObject
 import bigboss.team.learnpenguin.databinding.FragmentFavNewsBinding
-import bigboss.team.learnpenguin.databinding.FragmentNewsBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FavNewsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FavNewsFragment : Fragment() {
 
     private lateinit var binding: FragmentFavNewsBinding
@@ -30,7 +28,40 @@ class FavNewsFragment : Fragment() {
         binding = FragmentFavNewsBinding.inflate(inflater, container, false)
 
         val root: View = binding.root
+        val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
+        val recyclerView = binding.favNewsList
+        recyclerView.layoutManager = linearLayoutManager
+
+        if(activity != null)
+        {
+            loadFavNews()
+        }
+
+        val swipeFunction = object : SwipeToDeleteFunction(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                when(direction)
+                {
+                    ItemTouchHelper.LEFT ->{
+                        (activity as MainActivity?)!!.removeFavNews(viewHolder.absoluteAdapterPosition)
+                        recyclerView.adapter?.notifyItemRemoved(viewHolder.absoluteAdapterPosition)
+                    }
+                }
+            }
+        }
+        val touchHelper = ItemTouchHelper(swipeFunction)
+        touchHelper.attachToRecyclerView(recyclerView)
         return root
+    }
+
+    private fun loadFavNews(){
+        val favNewsObjectList : ArrayList<FavNewsObject> = (activity as MainActivity?)!!.getFavNewsObjectList()
+        if(activity != null)
+        {
+            val adapter = FavNewsAdapter(favNewsObjectList,activity)
+            val recyclerView = binding.favNewsList
+            recyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }
     }
 
 
