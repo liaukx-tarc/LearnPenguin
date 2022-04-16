@@ -1,14 +1,15 @@
 package bigboss.team.learnpenguin.ui.collection
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentCollectionBinding
@@ -50,7 +51,7 @@ class FragmentCollection : Fragment() {
 
                         if(userResult.child("collection").child(i.toString()).value == true)
                         {
-                            val courseID = courseNameResult.child(i.toString()).value.toString()
+
 
                             //Horizontal Linear Layout
                             var linearLayout = LinearLayout(activity)
@@ -64,7 +65,7 @@ class FragmentCollection : Fragment() {
                             linearLayout.setOnClickListener {
                                 Navigation.findNavController(it).navigate(
                                     resources.getIdentifier(
-                                        courseResult.child(courseID).child("id").value.toString(),
+                                        courseResult.child(i.toString()).child("id").value.toString(),
                                         "id", activity?.packageName
                                     )
                                 )
@@ -77,6 +78,7 @@ class FragmentCollection : Fragment() {
                             imageView.layoutParams = imgParam
 
                             val file = File.createTempFile("temp", "png")
+                            val courseID = courseNameResult.child(i.toString()).value.toString()
 
                             storageRef.child("Image/${courseID}.png").getFile(file)
                                 .addOnSuccessListener {
@@ -104,7 +106,7 @@ class FragmentCollection : Fragment() {
                             txtParam.setMargins(0, 20, 0, 50)
                             textView.layoutParams = txtParam
                             textView.textSize = 20F
-                            textView.text = courseResult.child(courseID).child("name").value.toString()
+                            textView.text = courseResult.child(i.toString()).child("name").value.toString()
                             textView.ellipsize = TextUtils.TruncateAt.MARQUEE
                             textView.maxLines = 1
 
@@ -120,11 +122,11 @@ class FragmentCollection : Fragment() {
                             starImageView.setOnClickListener { view ->
                                 userDatabase.child("User").child(auth.uid.toString()).child("collection").child(i.toString())
                                     .setValue(false).addOnSuccessListener {
-                                        toast("Favorite course removed")
+                                        toast("Favourite course removed")
                                         Navigation.findNavController(view).navigate(R.id.navigation_collection)
                                     }
                                     .addOnFailureListener {
-                                        toast("Fail remove")
+                                        toast("Fail to remove")
                                     }
 
                             }
