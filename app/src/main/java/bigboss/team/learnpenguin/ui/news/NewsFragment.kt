@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import bigboss.team.learnpenguin.Adapter.FavNewsAdapter
 import bigboss.team.learnpenguin.Adapter.FeedAdapter
 import bigboss.team.learnpenguin.Common.HTTPDataHandler
 import bigboss.team.learnpenguin.Common.SwipeToAddFunction
@@ -45,15 +46,15 @@ class NewsFragment : Fragment() {
 
         if(activity != null)
         {
-            loadRSS()
+            loadNews()
         }
         swipeRefreshLayout = binding.newsSwipe
         swipeRefreshLayout.setOnRefreshListener {
             if(activity != null)
             {
-                loadRSS()
+                (activity as MainActivity?)!!.loadRSS()
+                loadNews()
             }
-            recyclerView.adapter?.notifyDataSetChanged()
             swipeRefreshLayout.isRefreshing = false
         }
 
@@ -66,6 +67,7 @@ class NewsFragment : Fragment() {
                 when(direction)
                 {
                     ItemTouchHelper.RIGHT ->{
+                        val rssObject : RssObject = (activity as MainActivity?)!!.getRssObject()
                         val favNewsObject = FavNewsObject(rssObject.items[viewHolder.absoluteAdapterPosition].title
                             ,rssObject.items[viewHolder.absoluteAdapterPosition].pubDate
                             ,rssObject.items[viewHolder.absoluteAdapterPosition].thumbnail
@@ -82,34 +84,15 @@ class NewsFragment : Fragment() {
         return root
     }
 
-    private fun loadRSS() {
-        val loadRssASync = object:AsyncTask<String,String,String>(){
-            override fun doInBackground(vararg params: String?): String {
-                val result:String
-                val http = HTTPDataHandler()
-                result = http.GetHTTPDataHandler(params[0])
-                return result
-            }
-
-            override fun onPostExecute(result: String?) {
-                rssObject = Gson().fromJson<RssObject>(result,RssObject::class.java!!)
-                if(activity != null)
-                {
-                    val adapter = FeedAdapter(rssObject,activity)
-                    val recyclerView = binding.newsList
-                    recyclerView.adapter = adapter
-                    adapter.notifyDataSetChanged()
-                }
-            }
-
-
-
+    private fun loadNews(){
+        val rssObject : RssObject = (activity as MainActivity?)!!.getRssObject()
+        if(activity != null)
+        {
+            val adapter = FeedAdapter(rssObject,activity)
+            val recyclerView = binding.newsList
+            recyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
         }
-
-        val urlGetData = StringBuilder(rss2JsonApi)
-        urlGetData.append(rssLink+"&api_key=yjgpynj8b3683nl4mvgynzpdcikfzu9pyodlgg8a&count=25")
-        loadRssASync.execute(urlGetData.toString())
     }
-
 
 }
