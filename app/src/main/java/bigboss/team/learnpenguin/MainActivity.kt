@@ -1,7 +1,9 @@
 package bigboss.team.learnpenguin
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -9,16 +11,23 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import bigboss.team.learnpenguin.Adapter.FeedAdapter
+import bigboss.team.learnpenguin.Common.HTTPDataHandler
 import bigboss.team.learnpenguin.Model.FavNewsObject
+import bigboss.team.learnpenguin.Model.RssObject
 import bigboss.team.learnpenguin.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var rssObject: RssObject
+    private val rssLink = "http://feeds.arstechnica.com/arstechnica/technology-lab"
+    private val rss2JsonApi = "https://api.rss2json.com/v1/api.json?rss_url="
     private lateinit var favNewsObjectList : ArrayList<FavNewsObject>
     private lateinit var userDatabase : DatabaseReference
     private lateinit var auth: FirebaseAuth
@@ -48,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             NavigationUI.onNavDestinationSelected(item, navController)
             navController.popBackStack(item.itemId, inclusive = false)
         }
+        loadRSS()
         userDatabase.child("User").child(auth.uid.toString()).get()
             .addOnSuccessListener{
                 if(it.hasChild("favNewsList"))
@@ -80,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun mainMenu() {
+    fun mainMenu(view : View?) {
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
         navView.selectedItemId = R.id.navigation_main
     }
@@ -111,5 +121,27 @@ class MainActivity : AppCompatActivity() {
 
     fun getFavNewsObjectList(): ArrayList<FavNewsObject> {
         return favNewsObjectList
+    }
+
+    fun loadRSS() {
+        val loadRssASync = object:AsyncTask<String,String,String>(){
+            override fun doInBackground(vararg params: String?): String {
+                val result:String
+                val http = HTTPDataHandler()
+                result = http.GetHTTPDataHandler(params[0])
+                return result
+            }
+
+            override fun onPostExecute(result: String?) {
+                rssObject = Gson().fromJson<RssObject>(result,RssObject::class.java!!)
+            }
+        }
+        val urlGetData = StringBuilder(rss2JsonApi)
+        urlGetData.append(rssLink+"&api_key=yjgpynj8b3683nl4mvgynzpdcikfzu9pyodlgg8a&count=25")
+        loadRssASync.execute(urlGetData.toString())
+    }
+
+    fun getRssObject(): RssObject {
+        return rssObject
     }
 }
