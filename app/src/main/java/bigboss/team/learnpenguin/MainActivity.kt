@@ -2,7 +2,6 @@ package bigboss.team.learnpenguin
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -13,21 +12,27 @@ import androidx.navigation.ui.setupWithNavController
 import bigboss.team.learnpenguin.Model.FavNewsObject
 import bigboss.team.learnpenguin.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var favNewsObjectList : ArrayList<FavNewsObject>
+    private lateinit var userDatabase : DatabaseReference
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        userDatabase = FirebaseDatabase.getInstance().getReference("User")
+        auth = FirebaseAuth.getInstance()
         binding = ActivityMainBinding.inflate(layoutInflater)
         favNewsObjectList = arrayListOf()
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
-
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
@@ -43,6 +48,24 @@ class MainActivity : AppCompatActivity() {
             NavigationUI.onNavDestinationSelected(item, navController)
             navController.popBackStack(item.itemId, inclusive = false)
         }
+        userDatabase.child("User").child(auth.uid.toString()).get()
+            .addOnSuccessListener{
+                if(it.hasChild("favNewsList"))
+                {
+                    for(i in 0 until it.child("favNewsList").childrenCount)
+                    {
+                        val favNewsObject = FavNewsObject(
+                            it.child("favNewsList").child(i.toString()).child("title").value.toString()
+                            , it.child("favNewsList").child(i.toString()).child("pubDate").value.toString()
+                            , it.child("favNewsList").child(i.toString()).child("thumbnail").value.toString()
+                            , it.child("favNewsList").child(i.toString()).child("link").value.toString())
+                        favNewsObjectList.add(favNewsObject)
+                    }
+                }
+        }
+            .addOnFailureListener {
+                Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show()
+            }
     }
 
     //Back button function
@@ -57,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun mainMenu(view: View?) {
+    fun mainMenu() {
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
         navView.selectedItemId = R.id.navigation_main
     }
@@ -66,6 +89,7 @@ class MainActivity : AppCompatActivity() {
         if(!favNewsObjectList.contains(favNewsObject))
         {
             favNewsObjectList.add(favNewsObject)
+            userDatabase.child("User").child(auth.uid.toString()).child("favNewsList").child(favNewsObjectList.indexOf(favNewsObject).toString()).setValue(favNewsObject)
             Toast.makeText(this,"Favourite News Added", Toast.LENGTH_SHORT).show()
         }
         else
@@ -77,6 +101,11 @@ class MainActivity : AppCompatActivity() {
 
     fun removeFavNews(i: Int){
         favNewsObjectList.removeAt(i)
+        userDatabase.child("User").child(auth.uid.toString()).child("favNewsList").removeValue()
+        for((index, item) in favNewsObjectList.withIndex())
+        {
+            userDatabase.child("User").child(auth.uid.toString()).child("favNewsList").child(index.toString()).setValue(item)
+        }
         Toast.makeText(this,"Favourite News Removed", Toast.LENGTH_SHORT).show()
     }
 

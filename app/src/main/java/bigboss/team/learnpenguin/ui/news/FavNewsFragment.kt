@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bigboss.team.learnpenguin.Adapter.FavNewsAdapter
-import bigboss.team.learnpenguin.Common.SwipeToAddFunction
 import bigboss.team.learnpenguin.Common.SwipeToDeleteFunction
 import bigboss.team.learnpenguin.MainActivity
 import bigboss.team.learnpenguin.Model.FavNewsObject
@@ -23,12 +22,13 @@ class FavNewsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentFavNewsBinding.inflate(inflater, container, false)
 
         val root: View = binding.root
         val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
+        linearLayoutManager.reverseLayout = true
         val recyclerView = binding.favNewsList
         recyclerView.layoutManager = linearLayoutManager
 
