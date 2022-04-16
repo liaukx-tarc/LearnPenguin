@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="60dp"
-    tools:context=".ui.course.CourseFragment">
+    tools:context=".ui.course.CourseFragment"
+    android:background="#D7F1F3">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id ="@+id/courseList"
