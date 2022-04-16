@@ -68,9 +68,6 @@ class ProfileFragment : Fragment() {
 
                         if(userResult.child("collection").child(i.toString()).value == true)
                         {
-                            val courseID = courseNameResult.child(i.toString()).value.toString()
-                            viewModel.collection.add(courseID)
-
                             //Vectical Linear Layout
                             var linearLayout = LinearLayout(activity)
                             var layoutParam: LinearLayout.LayoutParams =
@@ -83,7 +80,7 @@ class ProfileFragment : Fragment() {
                             linearLayout.setOnClickListener {
                                 Navigation.findNavController(it).navigate(
                                     resources.getIdentifier(
-                                        courseResult.child(courseID).child("id").value.toString(),
+                                        courseResult.child(i.toString()).child("id").value.toString(),
                                         "id", activity?.packageName
                                     )
                                 )
@@ -96,6 +93,7 @@ class ProfileFragment : Fragment() {
                             imageView.layoutParams = imgParam
 
                             val file = File.createTempFile("temp", "png")
+                            val courseID = courseNameResult.child(i.toString()).value
 
                             storageRef.child("Image/${courseID}.png").getFile(file)
                                 .addOnSuccessListener {
@@ -117,7 +115,7 @@ class ProfileFragment : Fragment() {
                             txtParam.setMargins(0, 15, 0, 0)
                             textView.layoutParams = txtParam
                             textView.textSize = 16F
-                            textView.text = courseResult.child(courseID).child("name").value.toString()
+                            textView.text = courseResult.child(i.toString()).child("name").value.toString()
                             textView.ellipsize = TextUtils.TruncateAt.MARQUEE
                             textView.maxLines = 1
 
