@@ -1,5 +1,6 @@
 package bigboss.team.learnpenguin.ui.course
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -28,11 +29,21 @@ class CourseFragment : Fragment() {
     private lateinit var courseNameDatabase: DatabaseReference
     private lateinit var storageRef: StorageReference
     var newArrayList = ArrayList<CourseMenu>()
+    var isCreated = false
 
-    private val fragmentList = arrayOf(R.id.courseCFragment, R.id.courseCppFragment, R.id.courseCsFragment, R.id.courseJFragment, R.id.courseJsFragment)
+    private val fragmentList = arrayOf(
+        R.id.courseCFragment,
+        R.id.courseCppFragment,
+        R.id.courseCsFragment,
+        R.id.courseJFragment,
+        R.id.courseJsFragment
+    )
+
+    private val newFragmentList = ArrayList<Int>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
 
         courseNameDatabase = FirebaseDatabase.getInstance().getReference("CourseName")
         storageRef = FirebaseStorage.getInstance().reference
@@ -41,38 +52,52 @@ class CourseFragment : Fragment() {
         binding = FragmentCourseBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        courseNameDatabase.get().addOnSuccessListener { courseNameResult ->
+        if (!isCreated) {
+            courseNameDatabase.get().addOnSuccessListener { courseNameResult ->
 
-            for (i in 0 until 4) {
+                var successfulCount = 0
 
-                val file = File.createTempFile("temp", "png")
-                val id = courseNameResult.child(i.toString()).value.toString()
+                for (i in 0 until 5) {
+                    val file = File.createTempFile("temp", "png")
+                    val id = courseNameResult.child(i.toString()).value.toString()
 
-                Log.i("Activity", id)
+                    var courseMenu = CourseMenu(BitmapFactory.decodeResource(context?.resources, R.drawable.penguin_logo), "")
 
-                storageRef.child("Image/${id}.png").getFile(file)
-                    .addOnSuccessListener {
-                        Log.i("Activity", "Successful")
-                        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                        val courseMenu = CourseMenu(bitmap, id)
+                    storageRef.child("Image/${id}.png").getFile(file)
+                        .addOnSuccessListener {
 
-                        newArrayList.add(courseMenu)
-
-                        if(i == 4)
-                        {
-                            Log.i("Activity", "Binding")
-
-                            binding.courseList.layoutManager = LinearLayoutManager(activity)
-                            binding.courseList.setHasFixedSize(true)
-
-                            binding.courseList.adapter = CourseAdapter(newArrayList, fragmentList)
+                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                            courseMenu = CourseMenu(bitmap, id)
                         }
-                    }
+
+                        .addOnCompleteListener{
+                            newArrayList.add(courseMenu)
+                            newFragmentList.add(fragmentList[i])
+                            successfulCount++
+
+                            if (successfulCount == 5) {
+                                binding.courseList.layoutManager = LinearLayoutManager(activity)
+                                binding.courseList.setHasFixedSize(true)
+
+                                binding.courseList.adapter = CourseAdapter(newArrayList, newFragmentList.toTypedArray())
+
+                                isCreated = true
+                            }
+                        }
                 }
+
             }
+
+        } else {
+            binding.courseList.layoutManager = LinearLayoutManager(activity)
+            binding.courseList.setHasFixedSize(true)
+
+            binding.courseList.adapter = CourseAdapter(newArrayList, newFragmentList.toTypedArray())
+        }
+
 
         //newRecyclerView.adapter = CourseAdapter(newArrayList)
 
         return root
-        }
     }
+}
