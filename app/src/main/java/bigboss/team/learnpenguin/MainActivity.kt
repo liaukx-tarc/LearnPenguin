@@ -5,15 +5,16 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import bigboss.team.learnpenguin.Adapter.FeedAdapter
 import bigboss.team.learnpenguin.Common.HTTPDataHandler
 import bigboss.team.learnpenguin.Model.FavNewsObject
+import bigboss.team.learnpenguin.Model.NewsViewModel
 import bigboss.team.learnpenguin.Model.RssObject
 import bigboss.team.learnpenguin.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,8 +27,10 @@ import com.google.gson.Gson
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var rssObject: RssObject
+    private lateinit var rssObjectMain: RssObject
     private val rssLink = "http://feeds.arstechnica.com/arstechnica/technology-lab"
     private val rss2JsonApi = "https://api.rss2json.com/v1/api.json?rss_url="
+    private val model : NewsViewModel by viewModels()
     private lateinit var favNewsObjectList : ArrayList<FavNewsObject>
     private lateinit var userDatabase : DatabaseReference
     private lateinit var auth: FirebaseAuth
@@ -134,6 +137,14 @@ class MainActivity : AppCompatActivity() {
 
             override fun onPostExecute(result: String?) {
                 rssObject = Gson().fromJson<RssObject>(result,RssObject::class.java!!)
+                rssObjectMain = Gson().fromJson<RssObject>(result,RssObject::class.java!!)
+                val size  = rssObjectMain.items.size
+                if (size > 5)
+                {
+                    for (i in size - 1 downTo 5)
+                        rssObjectMain.items.removeAt(i)
+                }
+                model.setBool(true)
             }
         }
         val urlGetData = StringBuilder(rss2JsonApi)
@@ -143,5 +154,9 @@ class MainActivity : AppCompatActivity() {
 
     fun getRssObject(): RssObject {
         return rssObject
+    }
+
+    fun getRssObjectMain(): RssObject {
+        return rssObjectMain
     }
 }

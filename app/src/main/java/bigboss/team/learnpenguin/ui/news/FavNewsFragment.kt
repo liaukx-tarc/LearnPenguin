@@ -27,8 +27,7 @@ class FavNewsFragment : Fragment() {
         binding = FragmentFavNewsBinding.inflate(inflater, container, false)
 
         val root: View = binding.root
-        val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
-        linearLayoutManager.reverseLayout = true
+        val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,true)
         val recyclerView = binding.favNewsList
         recyclerView.layoutManager = linearLayoutManager
 
