@@ -71,15 +71,8 @@ class QuizFragment : Fragment() {
             }
 
             binding.quizList.setOnClickListener{
-<<<<<<< Updated upstream
                 toast("You Clicked on {$id}")
-
             }
-            
-=======
-                //toast("You CLicked {${id}}")
-            }
->>>>>>> Stashed changes
         }
 
             //newRecyclerView.adapter = QuizAdapter(newArrayList)
@@ -90,10 +83,5 @@ class QuizFragment : Fragment() {
     private fun toast(text: String) {
         Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
-
-<<<<<<< Updated upstream
-}
-=======
 }
 
->>>>>>> Stashed changes

@@ -4,10 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-<<<<<<< Updated upstream
 import androidx.navigation.Navigation
-=======
->>>>>>> Stashed changes
 import androidx.recyclerview.widget.RecyclerView
 import bigboss.team.learnpenguin.Interface.ItemClickListener
 import bigboss.team.learnpenguin.R

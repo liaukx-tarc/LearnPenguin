@@ -1,6 +1,5 @@
 package bigboss.team.learnpenguin.ui.quiz
 
-<<<<<<< Updated upstream
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -9,17 +8,13 @@ import android.graphics.Typeface
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.os.Bundle
 import android.util.Log
-=======
-import android.os.Bundle
->>>>>>> Stashed changes
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-<<<<<<< Updated upstream
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentNewsBinding
@@ -36,21 +31,10 @@ class QuizQuestionFragment : Fragment(), View.OnClickListener {
     private var quizQuestionList: ArrayList<QuizQuestion> ?= null
     private var selectedOption: Int = 0
 
-=======
-import bigboss.team.learnpenguin.R
-import bigboss.team.learnpenguin.databinding.FragmentProfileBinding
-import bigboss.team.learnpenguin.databinding.FragmentQuizQuestionBinding
-
-class QuizQuestionFragment : Fragment() {
-
-    private lateinit var binding: FragmentQuizQuestionBinding
-
->>>>>>> Stashed changes
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-<<<<<<< Updated upstream
 
         binding = FragmentQuizQuestionBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -117,9 +101,11 @@ class QuizQuestionFragment : Fragment() {
                             binding.quizSubmitBtn.text = "Finish"
                         } else {
                             binding.quizSubmitBtn.text = "Next Question"
+                            //currentPosition++
                         }
 
                         selectedOption = 0
+                        currentPosition++
                     }
                 }
             }
@@ -129,7 +115,7 @@ class QuizQuestionFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setQuestion() {
 
-        val question = quizQuestionList!!.get(currentPosition - 1)
+        val question = quizQuestionList!!.get(currentPosition-1)
 
         defaultOptionView()
 
@@ -205,13 +191,4 @@ class QuizQuestionFragment : Fragment() {
         Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 }
-=======
-        // Inflate the layout for this fragment
 
-        //binding = FragmentQuizQuestionBinding.inflate(inflater, container, false)
-        //val root: View = binding.root
-
-        return root
-    }
-}
->>>>>>> Stashed changes
