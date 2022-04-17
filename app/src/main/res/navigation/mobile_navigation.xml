@@ -78,9 +78,4 @@
         android:name="bigboss.team.learnpenguin.ui.course.cs.CourseCsFragment"
         android:label="C# Course"
         tools:layout="@layout/fragment_course_cs" />
-    <fragment
-        android:id="@+id/navigation_quiz_question"
-        android:name="bigboss.team.learnpenguin.ui.quiz.QuizQuestionFragment"
-        android:label="fragment_quiz_question"
-        tools:layout="@layout/fragment_quiz_question" />
 </navigation>

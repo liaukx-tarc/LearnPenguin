@@ -8,13 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import bigboss.team.learnpenguin.Adapter.QuizAdapter
 import bigboss.team.learnpenguin.Adapter.QuizViewHolder
 import bigboss.team.learnpenguin.databinding.FragmentQuizBinding
-import bigboss.team.learnpenguin.databinding.QuizListBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -69,17 +66,7 @@ class QuizFragment : Fragment() {
                         }
                     }
             }
-
-            binding.quizList.setOnClickListener{
-<<<<<<< Updated upstream
-                toast("You Clicked on {$id}")
-
-            }
             
-=======
-                //toast("You CLicked {${id}}")
-            }
->>>>>>> Stashed changes
         }
 
             //newRecyclerView.adapter = QuizAdapter(newArrayList)
@@ -87,13 +74,4 @@ class QuizFragment : Fragment() {
         return root
     }
 
-    private fun toast(text: String) {
-        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
-    }
-
-<<<<<<< Updated upstream
 }
-=======
-}
-
->>>>>>> Stashed changes
