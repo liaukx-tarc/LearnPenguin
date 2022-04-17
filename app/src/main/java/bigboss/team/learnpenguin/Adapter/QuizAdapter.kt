@@ -1,23 +1,15 @@
 package bigboss.team.learnpenguin.Adapter
 
-import android.app.PendingIntent.getActivity
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import bigboss.team.learnpenguin.Interface.ItemClickListener
 import bigboss.team.learnpenguin.R
-import bigboss.team.learnpenguin.ui.quiz.QuizDashboard
-import bigboss.team.learnpenguin.ui.quiz.QuizFragment
 import bigboss.team.learnpenguin.ui.quiz.QuizMenu
 import com.google.android.material.imageview.ShapeableImageView
-import kotlin.coroutines.coroutineContext
 
 class QuizViewHolder(quizView: View) : RecyclerView.ViewHolder(quizView), View.OnClickListener,View.OnLongClickListener {
 
@@ -66,7 +58,7 @@ class QuizAdapter (private val quizList : ArrayList<QuizMenu>) : RecyclerView.Ad
 
             if(!isLongClick)
             {
-
+                Navigation.findNavController(view).navigate(R.id.navigation_quiz_question)
             }
         } )
     }
