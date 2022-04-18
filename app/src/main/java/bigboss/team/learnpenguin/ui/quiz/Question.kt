@@ -1,5 +1,13 @@
 package bigboss.team.learnpenguin.ui.quiz
 
+import android.graphics.BitmapFactory
+import androidx.recyclerview.widget.LinearLayoutManager
+import bigboss.team.learnpenguin.Adapter.QuizAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import java.io.File
+
 object Question {
 
     fun getQuestion(): ArrayList<QuizQuestion> {
