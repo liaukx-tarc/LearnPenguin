@@ -2,6 +2,7 @@ package bigboss.team.learnpenguin.ui.profile
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Typeface
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.TextUtils
@@ -75,7 +76,7 @@ class ProfileFragment : Fragment() {
                             layoutParam.setMargins(20, 30, 0, 30)
                             linearLayout.layoutParams = layoutParam
                             linearLayout.orientation = LinearLayout.VERTICAL
-                            linearLayout.setBackgroundColor(resources.getColor(R.color.light_gray))
+                            linearLayout.setBackgroundResource(R.drawable.gray_bg)
                             linearLayout.isClickable = true
                             linearLayout.setOnClickListener {
                                 Navigation.findNavController(it).navigate(
@@ -111,11 +112,12 @@ class ProfileFragment : Fragment() {
                             //Text
                             var textView = TextView(activity)
                             var txtParam: LinearLayout.LayoutParams =
-                                LinearLayout.LayoutParams(350, 100)
-                            txtParam.setMargins(0, 15, 0, 0)
+                                LinearLayout.LayoutParams(342, 100)
+                            txtParam.setMargins(15, 15, 0, 0)
                             textView.layoutParams = txtParam
                             textView.textSize = 16F
                             textView.text = courseResult.child(i.toString()).child("name").value.toString()
+                            textView.setTypeface(null, Typeface.BOLD)
                             textView.ellipsize = TextUtils.TruncateAt.MARQUEE
                             textView.maxLines = 1
 
