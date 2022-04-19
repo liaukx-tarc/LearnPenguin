@@ -16,10 +16,17 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import bigboss.team.learnpenguin.Adapter.QuizAdapter
+import bigboss.team.learnpenguin.Adapter.QuizViewHolder
 import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentNewsBinding
 import bigboss.team.learnpenguin.databinding.FragmentQuizBinding
 import bigboss.team.learnpenguin.databinding.FragmentQuizQuestionBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import org.w3c.dom.Text
 import android.util.Log.i as i1
 
@@ -27,23 +34,67 @@ class QuizQuestionFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding: FragmentQuizQuestionBinding
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var quizDatabase: DatabaseReference
+
     private var currentPosition: Int = 1
-    private var quizQuestionList: ArrayList<QuizQuestion> ?= null
+    private var quizQuestionList = ArrayList<QuizQuestion>()
     private var selectedOption: Int = 0
+    private var correctCount: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+        var quizHeading = requireArguments().getString("Heading")
+        //Log.i("Quiz", quizHeading.toString())
+
+        if (quizHeading.toString() == "C++"){
+            quizHeading = "C Plus"
+        }
+
+        if (quizHeading.toString() == "C#"){
+            quizHeading = "C Sharp"
+        }
+
+        quizDatabase = FirebaseDatabase.getInstance().getReference("Quiz")
+        auth = FirebaseAuth.getInstance()
+
         binding = FragmentQuizQuestionBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        quizQuestionList = Question.getQuestion()
+        quizDatabase.get().addOnSuccessListener { quizResult ->
 
-        i1("Activity", "Question List Size ${quizQuestionList!!.size}")
-        
-        setQuestion()
+            for (i in 1 until 11){
+
+                val getId = quizResult.child(quizHeading.toString()).child(i.toString()).child("id").value.toString().toInt()
+                val getQuestion = quizResult.child(quizHeading.toString()).child(i.toString()).child("question").value.toString()
+                val getOptionOne = quizResult.child(quizHeading.toString()).child(i.toString()).child("optionOne").value.toString()
+                val getOptionTwo = quizResult.child(quizHeading.toString()).child(i.toString()).child("optionTwo").value.toString()
+                val getOptionThree = quizResult.child(quizHeading.toString()).child(i.toString()).child("optionThree").value.toString()
+                val getOptionFour = quizResult.child(quizHeading.toString()).child(i.toString()).child("optionFour").value.toString()
+                val getAnswer = quizResult.child(quizHeading.toString()).child(i.toString()).child("answer").value.toString().toInt()
+
+                val getQuestionList = QuizQuestion(getId, getQuestion, getOptionOne, getOptionTwo, getOptionThree, getOptionFour, getAnswer)
+                quizQuestionList.add(getQuestionList)
+
+            }
+
+            //Log.i("Firebase", "Question Size ${quizQuestionList.size}")
+
+        }
+
+            .addOnFailureListener { ex ->
+                toast(ex.message.toString())
+                //Log.i("Firebase", "Failed")
+            }
+
+            .addOnCompleteListener {
+                setQuestion()
+            }
+
+        //i1("Activity", "Question List Size ${quizQuestionList!!.size}")
 
         binding.quizOptionOne.setOnClickListener(this)
         binding.quizOptionTwo.setOnClickListener(this)
@@ -78,34 +129,49 @@ class QuizQuestionFragment : Fragment(), View.OnClickListener {
 
                 binding.quizSubmitBtn.id -> {
                     if (selectedOption == 0) {
+                        Log.i("Count", "$currentPosition")
                         when {
-                            currentPosition <= quizQuestionList!!.size -> {
+                            currentPosition <= quizQuestionList.size -> {
                                 setQuestion()
                             }
                             else -> {
-                                Toast.makeText(activity, "You Completed Quiz", Toast.LENGTH_SHORT)
-                                    .show()
-                                //Navigation.findNavController(view).navigate(R.id.navigation_quiz)
+                                /*
+                                view?.let {
+                                    findNavController(it).navigate(R.id.navigation_quiz_result, Bundle().apply {
+                                        putInt("Count", correctCount)
+                                    })
+                                }
+
+                                Log.i("Correct Count", "$correctCount")
+
+                                 */
                             }
                         }
                     } else {
-                        val question = quizQuestionList?.get(currentPosition - 1)
-                        if(question!!.answer != selectedOption){
-
+                        val question = quizQuestionList.get(currentPosition - 1)
+                        if(question.answer != selectedOption){
                             answerView(selectedOption, R.drawable.wrong_option_border_bg)
-
+                        }
+                        else{
+                            correctCount++
                         }
 
                         answerView(question.answer, R.drawable.correct_option_border_bg)
-                        if(currentPosition == quizQuestionList!!.size){
+
+                        if(currentPosition == quizQuestionList.size){
                             binding.quizSubmitBtn.text = "Finish"
+                            view?.let {
+                                findNavController(it).navigate(R.id.navigation_quiz_result, Bundle().apply {
+                                    putInt("Count", correctCount)
+
+                                })
+                            }
                         } else {
                             binding.quizSubmitBtn.text = "Next Question"
-                            //currentPosition++
+                            currentPosition++
                         }
 
                         selectedOption = 0
-                        currentPosition++
                     }
                 }
             }
@@ -115,11 +181,11 @@ class QuizQuestionFragment : Fragment(), View.OnClickListener {
     @SuppressLint("SetTextI18n")
     private fun setQuestion() {
 
-        val question = quizQuestionList!!.get(currentPosition-1)
+        val question = quizQuestionList.get(currentPosition - 1)
 
         defaultOptionView()
 
-        if (currentPosition == quizQuestionList!!.size){
+        if (currentPosition == quizQuestionList.size){
             binding.quizSubmitBtn.text = "Finish"
         }
         else{
@@ -191,4 +257,5 @@ class QuizQuestionFragment : Fragment(), View.OnClickListener {
         Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 }
+
 

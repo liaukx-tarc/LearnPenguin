@@ -81,6 +81,11 @@
     <fragment
         android:id="@+id/navigation_quiz_question"
         android:name="bigboss.team.learnpenguin.ui.quiz.QuizQuestionFragment"
-        android:label="fragment_quiz_question"
+        android:label="@string/quiz"
         tools:layout="@layout/fragment_quiz_question" />
+    <fragment
+        android:id="@+id/navigation_quiz_result"
+        android:name="bigboss.team.learnpenguin.ui.quiz.QuizResultFragment"
+        android:label="Quiz Result"
+        tools:layout="@layout/fragment_quiz_result" />
 </navigation>

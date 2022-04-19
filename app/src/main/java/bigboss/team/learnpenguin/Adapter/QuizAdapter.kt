@@ -1,15 +1,26 @@
 package bigboss.team.learnpenguin.Adapter
 
+import android.content.Context
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import bigboss.team.learnpenguin.Interface.ItemClickListener
 import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.ui.quiz.QuizMenu
+import bigboss.team.learnpenguin.ui.quiz.QuizQuestionFragment
 import com.google.android.material.imageview.ShapeableImageView
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+
+import android.content.SharedPreferences
+import androidx.navigation.Navigation.findNavController
+
 
 class QuizViewHolder(quizView: View) : RecyclerView.ViewHolder(quizView), View.OnClickListener,View.OnLongClickListener {
 
@@ -39,7 +50,7 @@ class QuizViewHolder(quizView: View) : RecyclerView.ViewHolder(quizView), View.O
 
 class QuizAdapter (private val quizList : ArrayList<QuizMenu>) : RecyclerView.Adapter<QuizViewHolder>() {
 
-    private lateinit var  itemListener: ItemClickListener
+    private lateinit var itemListener: ItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewHolder {
 
@@ -58,7 +69,13 @@ class QuizAdapter (private val quizList : ArrayList<QuizMenu>) : RecyclerView.Ad
 
             if(!isLongClick)
             {
-                Navigation.findNavController(view).navigate(R.id.navigation_quiz_question)
+                Log.i("Activity", "Click")
+                findNavController(view).navigate(R.id.navigation_quiz_question, Bundle().apply {
+                    putString("Heading", currentItem.heading)
+                })
+
+                //Log.i("Course", "Num: $position")
+
             }
         } )
     }
@@ -67,4 +84,7 @@ class QuizAdapter (private val quizList : ArrayList<QuizMenu>) : RecyclerView.Ad
 
         return quizList.size
     }
+
 }
+
+
