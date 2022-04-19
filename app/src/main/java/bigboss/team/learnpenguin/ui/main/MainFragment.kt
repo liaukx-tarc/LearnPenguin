@@ -75,7 +75,7 @@ class MainFragment : Fragment() {
         }
 
         binding.seeAllCourse.setOnClickListener{ view ->
-            Navigation.findNavController(view).navigate(R.id.courseFragment)
+            Navigation.findNavController(view).navigate(R.id.navigation_course)
         }
 
         return root

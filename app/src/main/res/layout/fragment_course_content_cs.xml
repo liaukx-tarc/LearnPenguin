@@ -5,12 +5,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.course.cs.CourseContentCs">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/content_cs"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:scrollbars="vertical" />
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:padding="8dp"
+            android:justificationMode="inter_word"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/content_cs"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:scrollbars="vertical" />
+
+    </ScrollView>
+
+
 
 </FrameLayout>
