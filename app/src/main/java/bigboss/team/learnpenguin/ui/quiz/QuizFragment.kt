@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bigboss.team.learnpenguin.Adapter.QuizAdapter
 import bigboss.team.learnpenguin.Adapter.QuizViewHolder
+import bigboss.team.learnpenguin.R
 import bigboss.team.learnpenguin.databinding.FragmentQuizBinding
 import bigboss.team.learnpenguin.databinding.QuizListBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -48,11 +49,11 @@ class QuizFragment : Fragment() {
                 val file = File.createTempFile("temp", "png")
                 val id = courseNameResult.child(i.toString()).value.toString()
 
-                Log.i("Activity", id)
+                //Log.i("Activity", id)
 
                 storageRef.child("Image/${id}.png").getFile(file)
                     .addOnSuccessListener {
-                        Log.i("Activity", "Successful")
+                        //Log.i("Activity", "Successful")
                         val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                         val quizMenu = QuizMenu(bitmap, id)
 
@@ -60,7 +61,7 @@ class QuizFragment : Fragment() {
 
                         if(i == 4)
                         {
-                            Log.i("Activity", "Binding")
+                            //Log.i("Activity", "Binding")
 
                             binding.quizList.layoutManager = LinearLayoutManager(activity)
                             binding.quizList.setHasFixedSize(true)
@@ -71,7 +72,7 @@ class QuizFragment : Fragment() {
             }
 
             binding.quizList.setOnClickListener{
-                toast("You Clicked on {$id}")
+
             }
         }
 
