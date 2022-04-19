@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import bigboss.team.learnpenguin.Adapter.QuizAdapter
 import bigboss.team.learnpenguin.Adapter.QuizViewHolder
 import bigboss.team.learnpenguin.R
@@ -45,7 +46,6 @@ class QuizQuestionFragment : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
 
         var quizHeading = requireArguments().getString("Heading")
         //Log.i("Quiz", quizHeading.toString())
@@ -81,7 +81,7 @@ class QuizQuestionFragment : Fragment(), View.OnClickListener {
 
             }
 
-            Log.i("Firebase", "Question Size ${quizQuestionList.size}")
+            //Log.i("Firebase", "Question Size ${quizQuestionList.size}")
 
         }
 
@@ -129,15 +129,22 @@ class QuizQuestionFragment : Fragment(), View.OnClickListener {
 
                 binding.quizSubmitBtn.id -> {
                     if (selectedOption == 0) {
+                        Log.i("Count", "$currentPosition")
                         when {
                             currentPosition <= quizQuestionList.size -> {
                                 setQuestion()
                             }
                             else -> {
-                                Toast.makeText(activity, "You Completed Quiz", Toast.LENGTH_SHORT).show()
+                                /*
+                                view?.let {
+                                    findNavController(it).navigate(R.id.navigation_quiz_result, Bundle().apply {
+                                        putInt("Count", correctCount)
+                                    })
+                                }
+
                                 Log.i("Correct Count", "$correctCount")
 
-                                //Navigation.findNavController(view).navigate(R.id.navigation_quiz)
+                                 */
                             }
                         }
                     } else {
@@ -151,9 +158,14 @@ class QuizQuestionFragment : Fragment(), View.OnClickListener {
 
                         answerView(question.answer, R.drawable.correct_option_border_bg)
 
-
                         if(currentPosition == quizQuestionList.size){
                             binding.quizSubmitBtn.text = "Finish"
+                            view?.let {
+                                findNavController(it).navigate(R.id.navigation_quiz_result, Bundle().apply {
+                                    putInt("Count", correctCount)
+
+                                })
+                            }
                         } else {
                             binding.quizSubmitBtn.text = "Next Question"
                             currentPosition++
