@@ -48,4 +48,5 @@
     <string name="see_all_main"><![CDATA[See All >]]></string>
     <string name="favourite">Favourite</string>
     <string name="return_to_quiz_menu">Return to Quiz Menu</string>
+    <string name="learn_penguin">LearnPenguin</string>
 </resources>

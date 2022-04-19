@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.course.cs.CourseCsFragment">
+    tools:context=".ui.course.cs.CourseCsFragment"
+    android:paddingBottom="60dp">
 
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/course_cs"
